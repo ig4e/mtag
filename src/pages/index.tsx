@@ -75,7 +75,7 @@ function HomePage() {
 				)}
 				{data?.pages
 					?.map((page) => {
-						return page?.data.map((image) => {
+						return page?.data?.map((image) => {
 							const [url] = image.urls;
 
 							return (
