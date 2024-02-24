@@ -17,7 +17,7 @@ export default defineConfig({
 				categories: ["images"],
 				description: "Life is full of desires",
 				dir: "ltr",
-				display: "fullscreen",
+				display: "standalone",
 				name: "Rule 69",
 				lang: "en",
 				orientation: "portrait-primary",
