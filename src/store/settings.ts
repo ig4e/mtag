@@ -9,6 +9,7 @@ export interface SettingsState {
 	categories: string[];
 	blur: "off" | "soft" | "overcensorship";
 	imageOptimizations: boolean;
+	imageOptimizationQuailty: number;
 }
 
 interface SettingsStateActions {
@@ -21,6 +22,7 @@ interface SettingsStateActions {
 	setBlurLevel: (level: SettingsState["blur"]) => void;
 	setSource: (source: SettingsState["source"]) => void;
 	setImageOptimizations: (enable: boolean) => void;
+	setImageOptimizationQuailty: (quality: number) => void;
 }
 
 type SettingsStateWActions = SettingsState & SettingsStateActions;
@@ -34,6 +36,16 @@ export const useSettings = create<SettingsStateWActions>()(
 			categories: [],
 			blur: "off",
 			imageOptimizations: true,
+			imageOptimizationQuailty: 50,
+
+			setImageOptimizationQuailty(quality) {
+				if (quality > 100) quality = 100;
+				if (quality < 1) quality = 1;
+
+				set((state) => {
+					state.imageOptimizationQuailty = quality;
+				});
+			},
 
 			setImageOptimizations(enable) {
 				set((state) => {

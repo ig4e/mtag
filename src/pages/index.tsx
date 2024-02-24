@@ -27,7 +27,7 @@ function HomePage() {
 		initialPageParam: {},
 		getNextPageParam: (lastPage) => lastPage.pagination,
 		getPreviousPageParam: (firstPage) => firstPage.pagination,
-		queryFn: async ({ pageParam }) => {
+		queryFn: async ({ pageParam, signal }) => {
 			const params = pageParam as {
 				reddit?: {
 					[index: string]: string;
@@ -42,9 +42,13 @@ function HomePage() {
 				`${API_URL}/api/images?source=${settings.source}&page=${params.pages?.next || 1}&categories=${JSON.stringify(
 					settings.categories,
 				)}&mediaType=${settings.mediaType}&sfw=${settings.sfw}&redditAfter=${JSON.stringify(params.reddit || {})}`,
-			).then((res) => res.json());
+				{ signal },
+			).then((res) => {
+				if (res.status !== 200) throw new Error("Something went wrong");
+				return res.json();
+			});
 		},
-		retry: true,
+		retryDelay: 200,
 	});
 
 	useEffect(() => {
@@ -90,8 +94,8 @@ function HomePage() {
 													src={
 														settings.imageOptimizations
 															? image.wsrvSupport
-																? `https://wsrv.nl/?url=${url}&w=300&q=50&output=jpg`
-																: `${BANDWIDTH_HERO_URL}?url=${url}&jpeg=true&l=50`
+																? `https://wsrv.nl/?url=${url}&w=300&q=${settings.imageOptimizationQuailty}&output=jpg`
+																: `${BANDWIDTH_HERO_URL}?url=${url}&jpeg=true&l=${settings.imageOptimizationQuailty}&bw=0`
 															: url
 													}
 													loading="lazy"
@@ -120,21 +124,20 @@ function HomePage() {
 					})
 					.flat()}
 
-				{isLoading ||
-					(isFetching &&
-						Array.from({ length: 20 })
-							.fill("")
-							.map((_value, index) => {
-								const highet = Math.random() * 500 + 100;
+				{(isLoading || isFetching) &&
+					Array.from({ length: 20 })
+						.fill("")
+						.map((_value, index) => {
+							const highet = Math.random() * 500 + 100;
 
-								return (
-									<Skeleton
-										className="w-full rounded-md"
-										style={{ height: `${highet}px` }}
-										key={`skeleton-${index}`}
-									></Skeleton>
-								);
-							}))}
+							return (
+								<Skeleton
+									className="w-full rounded-md"
+									style={{ height: `${highet}px` }}
+									key={`skeleton-${index}`}
+								></Skeleton>
+							);
+						})}
 			</div>
 		</div>
 	);

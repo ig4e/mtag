@@ -3,7 +3,15 @@ import Footer from "./components/footer";
 import Navbar from "./components/navbar";
 import HomePage from "./pages";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: true,
+			retryOnMount: true,
+			refetchOnWindowFocus: false,
+		},
+	},
+});
 
 function App() {
 	return (

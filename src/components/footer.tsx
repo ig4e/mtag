@@ -159,18 +159,31 @@ function Footer() {
 									</Select>
 								</div>
 
-								<div className="flex items-center justify-between gap-4">
-									<Label htmlFor="image-optimizations">Use Image Optimizations</Label>
-									<Switch
-										checked={settings.imageOptimizations}
-										onCheckedChange={(value) => settings.setImageOptimizations(value)}
-									/>
+								<div className="flex flex-col gap-2">
+									<div className="flex items-center justify-between gap-4">
+										<Label htmlFor="image-optimizations">Use Image Optimizations</Label>
+										<Switch
+											checked={settings.imageOptimizations}
+											onCheckedChange={(value) => settings.setImageOptimizations(value)}
+										/>
+									</div>
+
+									{settings.imageOptimizations && (
+										<Input
+											type="number"
+											min={1}
+											max={100}
+											onChange={(e) => settings.setImageOptimizationQuailty(Number(e.target.value || 1))}
+											placeholder="Image Quality (1-100)"
+											value={settings.imageOptimizationQuailty}
+										></Input>
+									)}
 								</div>
 							</div>
 
 							<DrawerFooter>
 								<DrawerClose asChild>
-									<Button variant="outline">Cancel</Button>
+									<Button variant="outline">Close</Button>
 								</DrawerClose>
 							</DrawerFooter>
 						</DrawerContent>
