@@ -44,6 +44,7 @@ function HomePage() {
 				)}&mediaType=${settings.mediaType}&sfw=${settings.sfw}&redditAfter=${JSON.stringify(params.reddit || {})}`,
 			).then((res) => res.json());
 		},
+		retry: true,
 	});
 
 	useEffect(() => {
