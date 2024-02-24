@@ -62,7 +62,7 @@ function HomePage() {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, [isLoading, isFetching]);
 
-	const isEmpty = useMemo(() => data?.pages?.every((page) => page.data.length === 0), [data]);
+	const isEmpty = useMemo(() => data?.pages?.every((page) => page?.data?.length === 0), [data]);
 
 	return (
 		<div className="container pt-4">
