@@ -55,7 +55,7 @@ function Footer() {
 	return (
 		<>
 			<div className="h-24"></div>
-			<footer className="z-[30] py-4 bg-background drop-shadow-md backdrop-blur-xl fixed bottom-0 inset-x-0 border-t border-border">
+			<footer className="z-[30] py-3 bg-background drop-shadow-md backdrop-blur-xl fixed bottom-0 inset-x-0 border-t border-border">
 				<div className="container mx-auto flex items-center justify-between gap-4">
 					<Tabs
 						onValueChange={(value) => {
@@ -76,7 +76,7 @@ function Footer() {
 
 					<Drawer>
 						<DrawerTrigger asChild>
-							<Button variant={"secondary"} size={"icon"}>
+							<Button variant={"accent"} size={"icon"}>
 								<AdjustmentsVerticalIcon className="w-5 h-5" />
 							</Button>
 						</DrawerTrigger>
@@ -186,7 +186,7 @@ function Footer() {
 
 							<DrawerFooter>
 								<DrawerClose asChild>
-									<Button variant="outline">Close</Button>
+									<Button variant="accent">Close</Button>
 								</DrawerClose>
 							</DrawerFooter>
 						</DrawerContent>
