@@ -91,7 +91,7 @@ function HomePage() {
 											<div className="w-full">
 												<img
 													key={image.id}
-													className="object-cover object-center rounded-md bg-slate-900 w-full min-h-52"
+													className="object-cover object-center rounded-md bg-secondary w-full min-h-52"
 													src={
 														settings.imageOptimizations
 															? image.wsrvSupport
