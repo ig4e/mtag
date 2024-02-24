@@ -49,6 +49,7 @@ function HomePage() {
 				return res.json();
 			});
 		},
+		retryDelay: 500,
 	});
 
 	useEffect(() => {
