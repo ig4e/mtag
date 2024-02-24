@@ -159,7 +159,7 @@ function Footer() {
 									</Select>
 								</div>
 
-								<div className="flex flex-col gap-2">
+								<div className="flex flex-col gap-3">
 									<div className="flex items-center justify-between gap-4">
 										<Label htmlFor="image-optimizations">Use Image Optimizations</Label>
 										<Switch
@@ -169,14 +169,17 @@ function Footer() {
 									</div>
 
 									{settings.imageOptimizations && (
-										<Input
-											type="number"
-											min={1}
-											max={100}
-											onChange={(e) => settings.setImageOptimizationQuailty(Number(e.target.value || 1))}
-											placeholder="Image Quality (1-100)"
-											value={settings.imageOptimizationQuailty}
-										></Input>
+										<div className="space-y-2">
+											<Label htmlFor="image-optimizations">Image Quality (1-100%)</Label>
+											<Input
+												type="number"
+												min={1}
+												max={100}
+												onChange={(e) => settings.setImageOptimizationQuailty(Number(e.target.value || 1))}
+												placeholder=""
+												value={settings.imageOptimizationQuailty}
+											></Input>
+										</div>
 									)}
 								</div>
 							</div>

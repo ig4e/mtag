@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { API_URL, BANDWIDTH_HERO_URL } from "@/config";
@@ -48,7 +49,6 @@ function HomePage() {
 				return res.json();
 			});
 		},
-		retryDelay: 200,
 	});
 
 	useEffect(() => {
@@ -98,7 +98,7 @@ function HomePage() {
 																: `${BANDWIDTH_HERO_URL}?url=${url}&jpeg=true&l=${settings.imageOptimizationQuailty}&bw=0`
 															: url
 													}
-													loading="lazy"
+													onError={(e) => ((e.target as unknown as any).src = url)}
 												/>
 												<div
 													className={cn("absolute inset-0 w-full h-full rounded-md", {
