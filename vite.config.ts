@@ -21,7 +21,7 @@ export default defineConfig({
 				name: "Rule 69",
 				lang: "en",
 				orientation: "portrait-primary",
-				short_name: "Rule 96",
+				short_name: "Rule 69",
 				start_url: "/",
 				theme_color: "#000000",
 				icons: [
