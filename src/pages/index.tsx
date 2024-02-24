@@ -5,8 +5,9 @@ import { API_URL, BANDWIDTH_HERO_URL } from "@/config";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/store/settings";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useIntersectionObserver } from "@uidotdev/usehooks";
 import { SearchIcon } from "lucide-react";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 function HomePage() {
 	const settings = useSettings();
@@ -52,21 +53,24 @@ function HomePage() {
 		retryDelay: 500,
 	});
 
+	const handleNewPageFetch = useCallback(() => {
+		if (isLoading || isFetching) return;
+
+		console.log("End of page reached! Fetching a new page");
+
+		fetchNextPage();
+	}, [isLoading, isFetching, fetchNextPage]);
+
+	const [endOfPageRef, entry] = useIntersectionObserver({
+		threshold: 0.1,
+		rootMargin: "0px",
+	});
+
 	useEffect(() => {
-		const handleScroll = () => {
-			if (
-				window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight ||
-				isLoading ||
-				isFetching
-			)
-				return;
-
-			fetchNextPage();
-		};
-
-		window.addEventListener("scroll", handleScroll);
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, [isLoading, isFetching]);
+		if (entry?.isIntersecting) {
+			handleNewPageFetch();
+		}
+	}, [entry, handleNewPageFetch]);
 
 	const isEmpty = useMemo(() => data?.pages?.every((page) => page?.data?.length === 0), [data]);
 
@@ -81,11 +85,11 @@ function HomePage() {
 				)}
 				{data?.pages
 					?.map((page) => {
-						return page?.data?.map((image) => {
+						return page?.data?.map((image, index) => {
 							const [url] = image.urls;
 
 							return (
-								<div key={image.id} className="relative w-full">
+								<div key={`${image.id}-${index}`} className="relative w-full">
 									<Dialog>
 										<DialogTrigger asChild>
 											<div className="w-full">
@@ -140,6 +144,8 @@ function HomePage() {
 							);
 						})}
 			</div>
+
+			<div className="h-24 w-full" ref={endOfPageRef}></div>
 		</div>
 	);
 }

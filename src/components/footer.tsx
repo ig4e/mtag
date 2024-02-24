@@ -54,7 +54,6 @@ function Footer() {
 
 	return (
 		<>
-			<div className="h-24"></div>
 			<footer className="z-[30] py-3 bg-background drop-shadow-md backdrop-blur-xl fixed bottom-0 inset-x-0 border-t border-border">
 				<div className="container mx-auto flex items-center justify-between gap-4">
 					<Tabs
