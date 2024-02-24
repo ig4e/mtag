@@ -134,6 +134,7 @@ function Footer() {
 										placeholder="anal,big boobs"
 										onChange={(e) => setCategories(e.target.value!)}
 										value={categories}
+										type="text"
 									></Input>
 								</div>
 
