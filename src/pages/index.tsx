@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { API_URL, IMAGE_PROXY } from "@/config";
@@ -15,7 +16,15 @@ function HomePage() {
 
 	const { data, isLoading, isFetching, fetchNextPage } = useInfiniteQuery<{
 		meta: object;
-		data: { id: string | number; urls: string[]; category?: string; sub?: string; wsrvSupport: boolean }[];
+		data: {
+			id: string | number;
+			urls: string[];
+			category?: string;
+			sub?: string;
+			wsrvSupport: boolean;
+			isVideo?: boolean;
+			aspectRatio?: number;
+		}[];
 		pagination: {
 			reddit?: {
 				[index: string]: string;
@@ -90,38 +99,57 @@ function HomePage() {
 							const [url] = image.urls;
 
 							return (
-								<div key={`${image.id}-${index}`} className="relative w-full">
+								<div key={`${image.id}-${index}`} className="relative w-full overflow-hidden">
 									<Dialog>
 										<DialogTrigger asChild>
-											<div className="w-full">
-												<img
-													key={image.id}
-													className="object-cover object-center rounded-md bg-secondary w-full min-h-52"
-													src={
-														settings.imageOptimizations
-															? image.wsrvSupport
-																? `https://wsrv.nl/?url=${url}&w=300&q=${settings.imageOptimizationQuailty}&output=jpg`
-																: `https://wsrv.nl/?url=${encodeURIComponent(
-																		`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`,
-																  )}&w=300&q=${settings.imageOptimizationQuailty}&output=jpg`
-															: url
-													}
-												/>
+											<AspectRatio ratio={image.aspectRatio} className="bg-secondary rounded-md">
+												{image.isVideo ? (
+													<video
+														src={url}
+														controls
+														className="object-cover object-center rounded-md h-full w-full"
+													/>
+												) : (
+													<img
+														key={image.id}
+														className="object-cover object-center rounded-md w-full"
+														src={
+															settings.imageOptimizations
+																? image.wsrvSupport
+																	? `https://wsrv.nl/?url=${url}&w=300&q=${settings.imageOptimizationQuailty}&output=jpg`
+																	: `https://wsrv.nl/?url=${encodeURIComponent(
+																			`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`,
+																	  )}&w=300&q=${settings.imageOptimizationQuailty}&output=jpg`
+																: url
+														}
+													/>
+												)}
+
 												<div
 													className={cn("absolute inset-0 w-full h-full rounded-md", {
 														"backdrop-blur-3xl bg-gray-500/25": settings.blur === "overcensorship",
 														"backdrop-blur bg-gray-500/10": settings.blur === "soft",
 													})}
 												></div>
-											</div>
+											</AspectRatio>
 										</DialogTrigger>
-										<DialogContent className="p-0">
+										<DialogContent className="p-0 bg-transparent border-none">
 											<div className="container">
-												<img
-													className="object-cover object-center rounded-md bg-slate-900"
-													src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`}
-													loading="lazy"
-												></img>
+												<AspectRatio ratio={image.aspectRatio} className="bg-secondary w-full rounded-md p-0.5">
+													{image.isVideo ? (
+														<video
+															controls
+															src={url}
+															className="object-cover object-center rounded-md h-full w-full"
+														/>
+													) : (
+														<img
+															className="object-cover object-center rounded-md"
+															src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`}
+															loading="lazy"
+														></img>
+													)}
+												</AspectRatio>
 											</div>
 										</DialogContent>
 									</Dialog>
