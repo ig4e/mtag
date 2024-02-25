@@ -140,7 +140,7 @@ function HomePage() {
 														</video>
 													) : (
 														<img
-															className="object-cover object-center rounded-md"
+															className="object-cover object-center rounded-md w-full"
 															src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`}
 															loading="lazy"
 														></img>
