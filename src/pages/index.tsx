@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { API_URL, IMAGE_PROXY } from "@/config";
 import { cn } from "@/lib/utils";
@@ -132,8 +133,8 @@ function HomePage() {
 											</AspectRatio>
 										</DialogTrigger>
 										<DialogContent className="p-0 bg-transparent border-none">
-											<div className="container h-full max-h-[80vh] overflow-y-scroll ">
-												<AspectRatio ratio={image.aspectRatio} className="bg-secondary w-full rounded-md p-0.5">
+											<div className="mx-4 h-full max-h-[80vh] overflow-y-scroll space-y-2 bg-secondary p-0.5 rounded-md">
+												<AspectRatio ratio={image.aspectRatio} className="bg-accent w-full rounded-md">
 													{image.isVideo ? (
 														<video controls className="object-cover object-center rounded-md h-full w-full">
 															<source src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`} />
@@ -146,6 +147,20 @@ function HomePage() {
 														></img>
 													)}
 												</AspectRatio>
+
+												<div className="pb-2 px-4 space-y-1">
+													<Label className="text-lg">Info</Label>
+													{image.category && (
+														<p>
+															Category: <span className="text-muted-foreground text-sm">{image.category}</span>
+														</p>
+													)}
+													{image.sub && (
+														<p>
+															Sub Reddit: <span className="text-muted-foreground text-sm">{image.sub}</span>
+														</p>
+													)}
+												</div>
 											</div>
 										</DialogContent>
 									</Dialog>
