@@ -104,11 +104,9 @@ function HomePage() {
 										<DialogTrigger asChild>
 											<AspectRatio ratio={image.aspectRatio} className="bg-secondary rounded-md">
 												{image.isVideo ? (
-													<video
-														src={url}
-														controls
-														className="object-cover object-center rounded-md h-full w-full"
-													/>
+													<video controls className="object-cover object-center rounded-md h-full w-full">
+														<source src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`} />
+													</video>
 												) : (
 													<img
 														key={image.id}
@@ -137,11 +135,9 @@ function HomePage() {
 											<div className="container h-full max-h-[80vh] overflow-y-scroll ">
 												<AspectRatio ratio={image.aspectRatio} className="bg-secondary w-full rounded-md p-0.5">
 													{image.isVideo ? (
-														<video
-															controls
-															src={url}
-															className="object-cover object-center rounded-md h-full w-full"
-														/>
+														<video controls className="object-cover object-center rounded-md h-full w-full">
+															<source src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`} />
+														</video>
 													) : (
 														<img
 															className="object-cover object-center rounded-md"
