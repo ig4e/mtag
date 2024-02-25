@@ -25,6 +25,7 @@ function HomePage() {
 			wsrvSupport: boolean;
 			isVideo?: boolean;
 			aspectRatio?: number;
+			url: string;
 		}[];
 		pagination: {
 			reddit?: {
@@ -148,11 +149,12 @@ function HomePage() {
 													)}
 												</AspectRatio>
 
-												<div className="pb-2 px-4 space-y-1">
+												<div className="pb-2 px-4 space-y-2">
 													<Label className="text-lg">Info</Label>
 													{image.category && (
 														<p>
-															Category: <span className="text-muted-foreground text-sm">{image.category}</span>
+															Category:{" "}
+															<span className="text-muted-foreground text-sm">{image.category}</span>
 														</p>
 													)}
 													{image.sub && (
@@ -160,6 +162,19 @@ function HomePage() {
 															Sub Reddit: <span className="text-muted-foreground text-sm">{image.sub}</span>
 														</p>
 													)}
+													{image.url && (
+														<p>
+															Source:{" "}
+															<a
+																href={image.url}
+																className="text-sm underline text-primary"
+															>
+																{image.url}
+															</a>
+														</p>
+													)}
+
+													{!image.url && !image.sub && !image.category && <p>There's no data ¯\_(ツ)_/¯</p>}
 												</div>
 											</div>
 										</DialogContent>
