@@ -134,7 +134,7 @@ function HomePage() {
 											</AspectRatio>
 										</DialogTrigger>
 										<DialogContent className="p-0 bg-transparent border-none">
-											<div className="container">
+											<div className="container h-full max-h-[80vh] overflow-y-scroll ">
 												<AspectRatio ratio={image.aspectRatio} className="bg-secondary w-full rounded-md p-0.5">
 													{image.isVideo ? (
 														<video

@@ -9,7 +9,7 @@ function Navbar() {
 	const settings = useSettings();
 
 	return (
-		<nav className="z-[100] py-2 bg-background/50 drop-shadow-md backdrop-blur-xl sticky top-0 border-b border-border">
+		<nav className="z-[20] py-2 bg-background/50 drop-shadow-md backdrop-blur-xl sticky top-0 border-b border-border">
 			<div className="container mx-auto flex items-center justify-between">
 				<a href="/" className="flex items-center gap-2">
 					<img src={"/logo.png"} className="w-7 h-7 rounded" />
