@@ -21,6 +21,8 @@ function Navbar() {
 						<img src="/reddit.png" className="w-5 h-5"></img>
 					) : settings.source === "rule34" ? (
 						<img src="/rule34.ico" className="w-5 h-5"></img>
+					) : settings.source === "realbooru" ? (
+						<img src="/rb.ico" className="w-5 h-5"></img>
 					) : null}
 
 					<span>{mediaTypes[settings.mediaType]}</span>

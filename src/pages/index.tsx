@@ -1,7 +1,8 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { API_URL, BANDWIDTH_HERO_URL } from "@/config";
+import { API_URL, IMAGE_PROXY } from "@/config";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/store/settings";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -27,7 +28,7 @@ function HomePage() {
 	}>({
 		queryKey: ["images", settings.source, settings.mediaType, settings.categories, settings.sfw],
 		initialPageParam: {},
-		getNextPageParam: (lastPage) => lastPage.pagination,
+		getNextPageParam: (lastPage) => (lastPage.pagination?.pages?.next === null ? null : lastPage.pagination),
 		getPreviousPageParam: (firstPage) => firstPage.pagination,
 		queryFn: async ({ pageParam, signal }) => {
 			const params = pageParam as {
@@ -100,10 +101,11 @@ function HomePage() {
 														settings.imageOptimizations
 															? image.wsrvSupport
 																? `https://wsrv.nl/?url=${url}&w=300&q=${settings.imageOptimizationQuailty}&output=jpg`
-																: `${BANDWIDTH_HERO_URL}?url=${url}&jpeg=true&l=${settings.imageOptimizationQuailty}&bw=0`
+																: `https://wsrv.nl/?url=${encodeURIComponent(
+																		`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`,
+																  )}&w=300&q=${settings.imageOptimizationQuailty}&output=jpg`
 															: url
 													}
-													onError={(e) => ((e.target as unknown as any).src = url)}
 												/>
 												<div
 													className={cn("absolute inset-0 w-full h-full rounded-md", {
@@ -117,7 +119,7 @@ function HomePage() {
 											<div className="container">
 												<img
 													className="object-cover object-center rounded-md bg-slate-900"
-													src={url}
+													src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`}
 													loading="lazy"
 												></img>
 											</div>

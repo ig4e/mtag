@@ -33,6 +33,7 @@ const mediaTypes = [
 const sources = [
 	{ value: "reddit", name: "Reddit" },
 	{ value: "rule34", name: "Rule34" },
+	{ value: "realbooru", name: "Realbooru (Real 34)" },
 ];
 
 function Footer() {
@@ -51,6 +52,10 @@ function Footer() {
 	useEffect(() => {
 		setCategories(settings.categories.join(","));
 	}, []);
+
+	useEffect(() => {
+		window.scrollTo({ top: 0 });
+	}, [settings.categories, settings.mediaType, settings.source, settings.sfw]);
 
 	return (
 		<>

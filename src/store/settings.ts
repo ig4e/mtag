@@ -4,7 +4,7 @@ import { immer } from "zustand/middleware/immer";
 
 export interface SettingsState {
 	sfw: boolean;
-	source: "reddit" | "rule34";
+	source: "reddit" | "rule34" | "realbooru";
 	mediaType: "hentai" | "real";
 	categories: string[];
 	blur: "off" | "soft" | "overcensorship";
