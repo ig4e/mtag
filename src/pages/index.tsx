@@ -106,11 +106,16 @@ function HomePage() {
 										<DialogTrigger asChild>
 											<AspectRatio ratio={image.aspectRatio} className="bg-secondary rounded-md">
 												{image.isVideo ? (
-													<video controls className="object-cover object-center rounded-md h-full w-full">
+													<video
+														muted={true}
+														autoPlay={false}
+														className="object-cover object-center rounded-md h-full w-full"
+													>
 														<source src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`} />
 													</video>
 												) : (
 													<img
+														loading="lazy"
 														key={image.id}
 														className="object-cover object-center rounded-md w-full"
 														src={
@@ -165,10 +170,7 @@ function HomePage() {
 													{image.url && (
 														<p>
 															Source:{" "}
-															<a
-																href={image.url}
-																className="text-sm underline text-primary"
-															>
+															<a href={image.url} className="text-sm underline text-primary">
 																{image.url}
 															</a>
 														</p>
