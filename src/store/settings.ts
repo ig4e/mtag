@@ -61,13 +61,13 @@ export const useSettings = create<SettingsStateWActions>()(
 
 			addCategory(category) {
 				set((state) => {
-					state.categories = Array.from(new Set(...state.categories, category));
+					state.categories = Array.from(new Set([...state.categories, category]));
 				});
 			},
 
 			removeCategory(category) {
 				set((state) => {
-					state.categories = state.categories.filter((cate) => cate === category);
+					state.categories = state.categories.filter((cate) => cate !== category);
 				});
 			},
 

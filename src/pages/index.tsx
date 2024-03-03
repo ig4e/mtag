@@ -1,12 +1,10 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+import ImageCard from "@/components/image-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { API_URL, IMAGE_PROXY } from "@/config";
-import { cn } from "@/lib/utils";
+import { API_URL } from "@/config";
 import { useSettings } from "@/store/settings";
+import { Image } from "@/types/image";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useIntersectionObserver } from "@uidotdev/usehooks";
 import { SearchIcon } from "lucide-react";
@@ -17,16 +15,7 @@ function HomePage() {
 
 	const { data, isLoading, isFetching, fetchNextPage } = useInfiniteQuery<{
 		meta: object;
-		data: {
-			id: string | number;
-			urls: string[];
-			category?: string;
-			sub?: string;
-			wsrvSupport: boolean;
-			isVideo?: boolean;
-			aspectRatio?: number;
-			url: string;
-		}[];
+		data: Image[];
 		pagination: {
 			reddit?: {
 				[index: string]: string;
@@ -97,93 +86,7 @@ function HomePage() {
 				)}
 				{data?.pages
 					?.map((page) => {
-						return page?.data?.map((image, index) => {
-							const [url] = image.urls;
-
-							return (
-								<div key={`${image.id}-${index}`} className="relative w-full overflow-hidden">
-									<Dialog>
-										<DialogTrigger asChild>
-											<AspectRatio ratio={image.aspectRatio} className="bg-secondary rounded-md">
-												{image.isVideo ? (
-													<video
-														muted={true}
-														autoPlay={false}
-														className="object-cover object-center rounded-md h-full w-full"
-													>
-														<source src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`} />
-													</video>
-												) : (
-													<img
-														loading="lazy"
-														key={image.id}
-														className="object-cover object-center rounded-md w-full"
-														src={
-															settings.imageOptimizations
-																? image.wsrvSupport
-																	? `https://wsrv.nl/?url=${url}&w=300&q=${settings.imageOptimizationQuailty}&output=jpg`
-																	: `https://wsrv.nl/?url=${encodeURIComponent(
-																			`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`,
-																	  )}&w=300&q=${settings.imageOptimizationQuailty}&output=jpg`
-																: url
-														}
-													/>
-												)}
-
-												<div
-													className={cn("absolute inset-0 w-full h-full rounded-md", {
-														"backdrop-blur-3xl bg-gray-500/25": settings.blur === "overcensorship",
-														"backdrop-blur bg-gray-500/10": settings.blur === "soft",
-													})}
-												></div>
-											</AspectRatio>
-										</DialogTrigger>
-										<DialogContent className="p-0 bg-transparent border-none">
-											<div className="mx-4 h-full max-h-[80vh] overflow-y-scroll space-y-2 bg-secondary p-0.5 rounded-md">
-												<AspectRatio ratio={image.aspectRatio} className="bg-accent w-full rounded-md">
-													{image.isVideo ? (
-														<video controls className="object-cover object-center rounded-md h-full w-full">
-															<source src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`} />
-														</video>
-													) : (
-														<img
-															className="object-cover object-center rounded-md w-full"
-															src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`}
-															loading="lazy"
-														></img>
-													)}
-												</AspectRatio>
-
-												<div className="pb-2 px-4 space-y-2">
-													<Label className="text-lg">Info</Label>
-													{image.category && (
-														<p>
-															Category:{" "}
-															<span className="text-muted-foreground text-sm">{image.category}</span>
-														</p>
-													)}
-													{image.sub && (
-														<p>
-															Sub Reddit: <span className="text-muted-foreground text-sm">{image.sub}</span>
-														</p>
-													)}
-													{image.url && (
-														<p>
-															Source:{" "}
-															<a href={image.url} className="text-sm underline text-primary">
-																{image.url}
-															</a>
-														</p>
-													)}
-
-													{!image.url && !image.sub && !image.category && <p>There's no data ¯\_(ツ)_/¯</p>}
-												</div>
-											</div>
-										</DialogContent>
-									</Dialog>
-								</div>
-							);
-						});
+						return page?.data?.map((image, index) => <ImageCard image={image} key={`${image.id}-${index}`} />);
 					})
 					.flat()}
 

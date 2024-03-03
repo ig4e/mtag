@@ -47,11 +47,12 @@ function Footer() {
 		} else {
 			settings.setCategories([]);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [debouncedCategories]);
 
 	useEffect(() => {
-		setCategories(settings.categories.join(","));
-	}, []);
+		if (settings.categories.length >= 1) setCategories(settings.categories.join(","));
+	}, [settings.categories]);
 
 	useEffect(() => {
 		window.scrollTo({ top: 0 });
@@ -134,12 +135,17 @@ function Footer() {
 
 								<div className="space-y-2">
 									<Label htmlFor="category">Category</Label>
-									<Input
-										placeholder="anal,big boobs"
-										onChange={(e) => setCategories(e.target.value!)}
-										value={categories}
-										type="text"
-									></Input>
+									<div className="flex items-center gap-2">
+										<Input
+											placeholder="anal,big boobs"
+											onChange={(e) => setCategories(e.target.value!)}
+											value={categories}
+											type="text"
+										></Input>
+										<Button onClick={() => setCategories("")} size={"sm"}>
+											Clear
+										</Button>
+									</div>
 								</div>
 
 								<div className="space-y-2">
@@ -163,7 +169,7 @@ function Footer() {
 									</Select>
 								</div>
 
-								<div className="flex flex-col gap-3">
+								<div className="flex flex-col gap-2">
 									<div className="flex items-center justify-between gap-4">
 										<Label htmlFor="image-optimizations">Use Image Optimizations</Label>
 										<Switch
@@ -174,15 +180,26 @@ function Footer() {
 
 									{settings.imageOptimizations && (
 										<div className="space-y-2">
-											<Label htmlFor="image-optimizations">Image Quality (1-100%)</Label>
-											<Input
-												type="number"
-												min={1}
-												max={100}
-												onChange={(e) => settings.setImageOptimizationQuailty(Number(e.target.value || 1))}
-												placeholder=""
-												value={settings.imageOptimizationQuailty}
-											></Input>
+											<Label htmlFor="image-optimizations" className="text-sm">
+												Image Quality
+											</Label>
+											<Select
+												onValueChange={(value) => settings.setImageOptimizationQuailty(Number(value))}
+												value={String(settings.imageOptimizationQuailty)}
+											>
+												<SelectTrigger className="w-full">
+													<SelectValue placeholder="95%" />
+												</SelectTrigger>
+												<SelectContent>
+													{Array.from({ length: 10 }, (_v, i) => (i + 1) * 10).map((value) => {
+														return (
+															<SelectItem value={String(value)} key={value + "%%"}>
+																{value}%
+															</SelectItem>
+														);
+													})}
+												</SelectContent>
+											</Select>
 										</div>
 									)}
 								</div>
