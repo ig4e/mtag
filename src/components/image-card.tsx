@@ -94,7 +94,7 @@ function ImageCard({ image }: { image: Image }) {
 												<Badge
 													key={category}
 													variant={isInFilter ? "default" : "secondary"}
-													className="cursor-pointer"
+													className="cursor-pointer overflow-hidden text-ellipsis"
 													onClick={() => {
 														if (isInFilter) {
 															setAddedCategories((state) => state.filter((c) => c !== category));
