@@ -4,12 +4,15 @@ import { immer } from "zustand/middleware/immer";
 
 export interface SettingsState {
 	sfw: boolean;
-	source: "reddit" | "rule34" | "realbooru";
+	source: "rule34" | "reddit" | "realbooru" | "gelbooru" | "hanimetv";
 	mediaType: "hentai" | "real";
 	categories: string[];
 	blur: "off" | "soft" | "overcensorship";
-	imageOptimizations: boolean;
-	imageOptimizationQuailty: number;
+	imageOptimizations: {
+		enabled: boolean;
+		quailty: number;
+		allowGifs: boolean;
+	};
 }
 
 interface SettingsStateActions {
@@ -21,6 +24,7 @@ interface SettingsStateActions {
 	clearCategories: () => void;
 	setBlurLevel: (level: SettingsState["blur"]) => void;
 	setSource: (source: SettingsState["source"]) => void;
+	setImageOptimizationAllowGifs: (enable: boolean) => void;
 	setImageOptimizations: (enable: boolean) => void;
 	setImageOptimizationQuailty: (quality: number) => void;
 }
@@ -34,22 +38,31 @@ export const useSettings = create<SettingsStateWActions>()(
 			source: "reddit",
 			mediaType: "real",
 			categories: [],
-			blur: "off",
-			imageOptimizations: true,
-			imageOptimizationQuailty: 50,
+			blur: "soft",
+			imageOptimizations: {
+				enabled: true,
+				allowGifs: true,
+				quailty: 50,
+			},
+
+			setImageOptimizationAllowGifs(allow) {
+				set((state) => {
+					state.imageOptimizations.allowGifs = allow;
+				});
+			},
 
 			setImageOptimizationQuailty(quality) {
 				if (quality > 100) quality = 100;
 				if (quality < 1) quality = 1;
 
 				set((state) => {
-					state.imageOptimizationQuailty = quality;
+					state.imageOptimizations.quailty = quality;
 				});
 			},
 
 			setImageOptimizations(enable) {
 				set((state) => {
-					state.imageOptimizations = enable;
+					state.imageOptimizations.enabled = enable;
 				});
 			},
 
@@ -100,7 +113,7 @@ export const useSettings = create<SettingsStateWActions>()(
 			},
 		})),
 		{
-			name: "settings",
+			name: "settings-v2",
 		},
 	),
 );

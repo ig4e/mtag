@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { RSelect } from "./ui/r-select";
 import { Switch } from "./ui/switch";
 
 const censorOptions = [
@@ -31,15 +32,79 @@ const mediaTypes = [
 ];
 
 const sources = [
-	{ value: "reddit", name: "Reddit" },
-	{ value: "rule34", name: "Rule34" },
-	{ value: "realbooru", name: "Realbooru (Real 34)" },
-];
+	{
+		value: "reddit",
+		name: "Reddit",
+		mediaType: "all",
+		categories: {
+			support: false,
+			values: undefined,
+		},
+		supportMediaType: true,
+	},
+	{
+		value: "rule34",
+		name: "Rule34",
+		mediaType: "hentai",
+		categories: {
+			support: true,
+			values: undefined,
+		},
+		supportMediaType: false,
+	},
+	{
+		value: "gelbooru",
+		name: "Gelbooru",
+		mediaType: "hentai",
+		categories: {
+			support: true,
+			values: undefined,
+		},
+		supportMediaType: false,
+	},
+	{
+		value: "realbooru",
+		name: "Realbooru (Real 34)",
+		mediaType: "real",
+		categories: {
+			support: true,
+			values: undefined,
+		},
+		supportMediaType: false,
+	},
+	{
+		value: "hanimetv",
+		name: "Hanime.tv",
+		mediaType: "all",
+		categories: {
+			support: true,
+			values: ["furry", "futa", "yaoi", "yuri", "traps", "irl-3d"],
+		},
+		supportMediaType: false,
+	},
+] as const;
+
+const sourcesAsObject: { [index: string]: (typeof sources)[number] } = {};
+sources.forEach((source) => {
+	sourcesAsObject[source.value] = source;
+});
 
 function Footer() {
 	const settings = useSettings();
 	const [categories, setCategories] = useState<string>();
 	const debouncedCategories = useDebounce(categories, 500);
+
+	useEffect(() => {
+		if (settings.source) {
+			const sourceSettings = sourcesAsObject[settings.source];
+			setCategories("");
+
+			if (sourceSettings.mediaType !== "all") {
+				settings.setMediaType(sourceSettings.mediaType);
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [settings.source]);
 
 	useEffect(() => {
 		if (debouncedCategories) {
@@ -57,6 +122,8 @@ function Footer() {
 	useEffect(() => {
 		window.scrollTo({ top: 0 });
 	}, [settings.categories, settings.mediaType, settings.source, settings.sfw]);
+
+	const sourceSettings = sourcesAsObject[settings.source];
 
 	return (
 		<>
@@ -113,8 +180,11 @@ function Footer() {
 									</Select>
 								</div>
 								<div className="space-y-2">
-									<Label htmlFor="mediaType">Media Type</Label>
+									<Label htmlFor="mediaType">
+										Media Type {sourceSettings.mediaType !== "all" ? "(Not supported)" : ""}
+									</Label>
 									<Select
+										disabled={sourceSettings.mediaType !== "all"}
 										onValueChange={(value) => settings.setMediaType(value as SettingsState["mediaType"])}
 										value={settings.mediaType}
 									>
@@ -134,15 +204,32 @@ function Footer() {
 								</div>
 
 								<div className="space-y-2">
-									<Label htmlFor="category">Category</Label>
+									<Label htmlFor="category">Category {!sourceSettings.categories.support ? "(Not supported)" : ""}</Label>
 									<div className="flex items-center gap-2">
-										<Input
-											placeholder="anal,big boobs"
-											onChange={(e) => setCategories(e.target.value!)}
-											value={categories}
-											type="text"
-										></Input>
-										<Button onClick={() => setCategories("")} size={"sm"}>
+										{sourceSettings.categories.values ? (
+											<RSelect
+												onChange={(n) => setCategories((n as { value: string }[]).map((c) => c.value).join(","))}
+												className="w-full"
+												isMulti
+												options={sourceSettings.categories.values.map((value) => ({ label: value, value }))}
+												value={settings.categories.map((value) => ({ label: value, value }))}
+											></RSelect>
+										) : (
+											<Input
+												disabled={!sourceSettings.categories.support}
+												placeholder="anal,big boobs"
+												onChange={(e) => setCategories(e.target.value!)}
+												value={categories}
+												type="text"
+											></Input>
+										)}
+
+										<Button
+											onClick={() => setCategories("")}
+											size={"sm"}
+											variant={"destructive"}
+											disabled={!sourceSettings.categories.support}
+										>
 											Clear
 										</Button>
 									</div>
@@ -173,7 +260,7 @@ function Footer() {
 									<div className="flex items-center justify-between gap-4">
 										<Label htmlFor="image-optimizations">Use Image Optimizations</Label>
 										<Switch
-											checked={settings.imageOptimizations}
+											checked={settings.imageOptimizations.enabled}
 											onCheckedChange={(value) => settings.setImageOptimizations(value)}
 										/>
 									</div>
@@ -185,7 +272,7 @@ function Footer() {
 											</Label>
 											<Select
 												onValueChange={(value) => settings.setImageOptimizationQuailty(Number(value))}
-												value={String(settings.imageOptimizationQuailty)}
+												value={String(settings.imageOptimizations.quailty)}
 											>
 												<SelectTrigger className="w-full">
 													<SelectValue placeholder="95%" />
@@ -200,12 +287,31 @@ function Footer() {
 													})}
 												</SelectContent>
 											</Select>
+
+											<div className="flex items-center justify-between gap-4 pt-2">
+												<Label htmlFor="image-optimizations" className="text-sm">
+													Allow Gifs
+												</Label>
+												<Switch
+													checked={settings.imageOptimizations.allowGifs}
+													onCheckedChange={(value) => settings.setImageOptimizationAllowGifs(value)}
+												/>
+											</div>
 										</div>
 									)}
 								</div>
 							</div>
 
 							<DrawerFooter>
+								<Button
+									variant="destructive"
+									onClick={() => {
+										localStorage.clear();
+										location.reload();
+									}}
+								>
+									Reset
+								</Button>
 								<DrawerClose asChild>
 									<Button variant="accent">Close</Button>
 								</DrawerClose>

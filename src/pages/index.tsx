@@ -7,13 +7,13 @@ import { useSettings } from "@/store/settings";
 import { Image } from "@/types/image";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useIntersectionObserver } from "@uidotdev/usehooks";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, AlertCircle } from "lucide-react";
 import { useCallback, useEffect, useMemo } from "react";
 
 function HomePage() {
 	const settings = useSettings();
 
-	const { data, isLoading, isFetching, fetchNextPage } = useInfiniteQuery<{
+	const { data, isLoading, isFetching, fetchNextPage, error, isError,  } = useInfiniteQuery<{
 		meta: object;
 		data: Image[];
 		pagination: {
@@ -84,6 +84,15 @@ function HomePage() {
 						<span>No Results</span>
 					</h1>
 				)}
+
+				{isError && (
+					<h1 className="w-full text-center col-span-3 text-3xl flex items-center justify-center gap-4 min-h-[60vh]">
+						<AlertCircle className="w-6 h-6"></AlertCircle>
+						<span>Something gone wrong</span>
+						<p>{error.message}</p>
+					</h1>
+				)}
+
 				{data?.pages
 					?.map((page) => {
 						return page?.data?.map((image, index) => <ImageCard image={image} key={`${image.id}-${index}`} />);

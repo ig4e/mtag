@@ -2,7 +2,6 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { IMAGE_PROXY } from "@/config";
 import useWsrv from "@/hooks/use-wsrv";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/store/settings";
@@ -39,7 +38,7 @@ function ImageCard({ image }: { image: Image }) {
 					<AspectRatio ratio={image.aspectRatio} className="bg-accent rounded-md">
 						{image.isVideo ? (
 							<video muted={true} autoPlay={false} className="object-cover object-center rounded-md h-full w-full">
-								<source src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`} />
+								<source src={wsrv({ url, isVideo: true })} />
 							</video>
 						) : (
 							<img
@@ -59,21 +58,21 @@ function ImageCard({ image }: { image: Image }) {
 					</AspectRatio>
 				</DialogTrigger>
 				<DialogContent className="p-0 bg-transparent border-none">
-					<div className="mx-4 h-full max-h-[80vh] overflow-y-scroll space-y-2 bg-secondary p-0.5 rounded-md">
+					<div className="mx-4 h-full max-h-[80vh] overflow-y-scroll space-y-2 bg-secondary p-0.5 rounded-lg">
 						<AspectRatio ratio={image.aspectRatio} className="bg-primary/5 w-full rounded-md relative">
 							{image.isVideo ? (
 								<video controls className="object-cover object-center rounded-md h-full w-full">
-									<source src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`} />
+									<source src={wsrv({ url, isVideo: true })} />
 								</video>
 							) : (
 								<img
 									className="object-cover object-center rounded-md w-full"
-									src={`${IMAGE_PROXY}/fetch?url=${url}&referer=${url}`}
+									src={wsrv({ url, raw: true })}
 									loading="lazy"
 								></img>
 							)}
 							<div
-								className={cn("absolute inset-0 w-full h-full rounded-md", {
+								className={cn("absolute inset-0 w-full h-full rounded-md pointer-events-none", {
 									"backdrop-blur-3xl bg-gray-500/25": settings.blur === "overcensorship",
 									"backdrop-blur bg-gray-500/10": settings.blur === "soft",
 								})}
