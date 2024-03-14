@@ -18,7 +18,7 @@ function useWsrv() {
 			return wsrvTemplate({
 				url: wsrvBlock ? proxyTemplate({ url, referer: url }) : url,
 				q: imageSettings.quailty,
-				w: screenWidth - 50,
+				w: screenWidth + 300,
 				s: 1,
 				n: imageSettings.allowGifs ? -1 : 1,
 			});
