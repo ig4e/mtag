@@ -1,8 +1,13 @@
-import { HTMLProps, useState } from "react";
+import { HTMLProps, useEffect, useState } from "react";
 
 export function BlurImage({ preview, src: image = "", ...props }: HTMLProps<HTMLImageElement> & { preview: string; loading: "lazy" }) {
 	const [currentImage, setCurrentImage] = useState(preview);
 	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		setCurrentImage(preview);
+		setLoading(false);
+	}, [preview]);
 
 	const fetchImage = (src: string) => {
 		const loadingImage = new Image();
