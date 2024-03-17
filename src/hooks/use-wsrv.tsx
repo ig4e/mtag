@@ -2,9 +2,8 @@ import { proxyTemplate, wsrvTemplate } from "@/config";
 import { useSettings } from "@/store/settings";
 import React, { useCallback } from "react";
 
-function useWsrv() {
+export function useWsrv() {
 	const imageSettings = useSettings((settings) => settings.imageOptimizations);
-
 	const [screenWidth, setScreenWidth] = React.useState(300);
 
 	React.useEffect(() => {
@@ -13,14 +12,40 @@ function useWsrv() {
 	}, []);
 
 	const callback = useCallback(
-		({ url, wsrvBlock, isVideo, raw }: { url: string; wsrvBlock?: boolean; isVideo?: boolean; raw?: boolean }) => {
+		({
+			url,
+			wsrvBlock,
+			isVideo,
+			isPreview,
+			isPlaceholder,
+			raw,
+		}: {
+			url: string;
+			wsrvBlock?: boolean;
+			isVideo?: boolean;
+			isPreview?: boolean;
+			raw?: boolean;
+			isPlaceholder?: boolean;
+		}) => {
 			if (isVideo || raw || !imageSettings.enabled) return proxyTemplate({ url, referer: url });
+
+			if (isPlaceholder)
+				return wsrvTemplate({
+					url: wsrvBlock ? proxyTemplate({ url, referer: url }) : url,
+					q: 50,
+					w: 10,
+					n: 1,
+					out: "jpg",
+					s: 0,
+				});
+
 			return wsrvTemplate({
 				url: wsrvBlock ? proxyTemplate({ url, referer: url }) : url,
-				q: imageSettings.quailty,
-				w: screenWidth + 300,
-				s: 1,
+				q: isPreview ? imageSettings.previewQuailty : imageSettings.quailty,
+				w: screenWidth + (isPreview ? screenWidth : screenWidth / 2),
+				s: imageSettings.sharpness,
 				n: imageSettings.allowGifs ? -1 : 1,
+				out: "webp",
 			});
 		},
 		[screenWidth, imageSettings],
@@ -29,4 +54,3 @@ function useWsrv() {
 	return callback;
 }
 
-export default useWsrv;

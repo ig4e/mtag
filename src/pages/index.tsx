@@ -1,5 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import ImageCard from "@/components/image-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { API_URL } from "@/config";
@@ -13,7 +11,11 @@ import { useCallback, useEffect, useMemo } from "react";
 function HomePage() {
 	const settings = useSettings();
 
-	const { data, isLoading, isFetching, fetchNextPage, error, isError,  } = useInfiniteQuery<{
+	useEffect(() => {
+		window.scrollTo({ top: 0, behavior: "instant" });
+	}, [settings.categories, settings.mediaType, settings.source, settings.sfw]);
+
+	const { data, isLoading, isFetching, fetchNextPage, error, isError } = useInfiniteQuery<{
 		meta: object;
 		data: Image[];
 		pagination: {
@@ -24,6 +26,7 @@ function HomePage() {
 				next: number;
 				prev: number;
 			};
+			pornhubPagination?: string;
 		};
 	}>({
 		queryKey: ["images", settings.source, settings.mediaType, settings.categories, settings.sfw],
@@ -39,12 +42,15 @@ function HomePage() {
 					next: number;
 					prev: number;
 				};
+				pornhubPagination?: string;
 			};
 
 			return await fetch(
 				`${API_URL}/api/images?source=${settings.source}&page=${params.pages?.next || 1}&categories=${JSON.stringify(
 					settings.categories,
-				)}&mediaType=${settings.mediaType}&sfw=${settings.sfw}&redditAfter=${JSON.stringify(params.reddit || {})}`,
+				)}&mediaType=${settings.mediaType}&sfw=${settings.sfw}&redditAfter=${JSON.stringify(
+					params.reddit || {},
+				)}&pornhubPagination=${params.pornhubPagination || "1:1"}`,
 				{ signal },
 			).then((res) => {
 				if (res.status !== 200) throw new Error("Something went wrong");
@@ -56,8 +62,6 @@ function HomePage() {
 
 	const handleNewPageFetch = useCallback(() => {
 		if (isLoading || isFetching) return;
-
-		console.log("End of page reached! Fetching a new page");
 
 		fetchNextPage();
 	}, [isLoading, isFetching, fetchNextPage]);

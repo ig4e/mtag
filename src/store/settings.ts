@@ -3,20 +3,29 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 export interface SettingsState {
+	hideOnScroll: "none" | "navbar" | "footer" | "all";
 	sfw: boolean;
 	source: "rule34" | "reddit" | "realbooru" | "gelbooru" | "hanimetv";
 	mediaType: "hentai" | "real";
 	categories: string[];
 	blur: "off" | "soft" | "overcensorship";
 	imageOptimizations: {
+		sharpness: number;
 		enabled: boolean;
+		enabledInPreview: boolean;
 		quailty: number;
+		previewQuailty: number;
 		allowGifs: boolean;
+	};
+	videoOptimizations: {
+		autoplay: boolean;
+		muted: boolean;
 	};
 }
 
 interface SettingsStateActions {
 	setSfw: (sfw: SettingsState["sfw"]) => void;
+	setHideOnScroll: (hideOnScroll: SettingsState["hideOnScroll"]) => void;
 	setMediaType: (mediaType: SettingsState["mediaType"]) => void;
 	setCategories: (source: SettingsState["categories"]) => void;
 	addCategory: (category: string) => void;
@@ -27,6 +36,10 @@ interface SettingsStateActions {
 	setImageOptimizationAllowGifs: (enable: boolean) => void;
 	setImageOptimizations: (enable: boolean) => void;
 	setImageOptimizationQuailty: (quality: number) => void;
+	setImageOptimizationSharpness: (sharpness: number) => void;
+	setImageOptimizationsInPreview: (enable: boolean) => void;
+	setImageOptimizationQuailtyInPreview: (quality: number) => void;
+	setVideoOptimizations: (options: Partial<SettingsState["videoOptimizations"]>) => void;
 }
 
 type SettingsStateWActions = SettingsState & SettingsStateActions;
@@ -35,19 +48,41 @@ export const useSettings = create<SettingsStateWActions>()(
 	persist(
 		immer((set) => ({
 			sfw: true,
-			source: "reddit",
+			hideOnScroll: "all",
+			source: "realbooru",
 			mediaType: "real",
 			categories: [],
 			blur: "soft",
+
+			videoOptimizations: {
+				autoplay: false,
+				muted: true,
+			},
+
 			imageOptimizations: {
 				enabled: true,
+				enabledInPreview: true,
 				allowGifs: true,
 				quailty: 50,
+				previewQuailty: 80,
+				sharpness: 1,
+			},
+
+			setVideoOptimizations(options) {
+				set((state) => {
+					state.videoOptimizations = { ...state.videoOptimizations, ...options };
+				});
 			},
 
 			setImageOptimizationAllowGifs(allow) {
 				set((state) => {
 					state.imageOptimizations.allowGifs = allow;
+				});
+			},
+
+			setHideOnScroll(hideOnScroll) {
+				set((state) => {
+					state.hideOnScroll = hideOnScroll;
 				});
 			},
 
@@ -60,9 +95,30 @@ export const useSettings = create<SettingsStateWActions>()(
 				});
 			},
 
+			setImageOptimizationSharpness(sharpness) {
+				set((state) => {
+					state.imageOptimizations.sharpness = sharpness;
+				});
+			},
+
+			setImageOptimizationQuailtyInPreview(quality) {
+				if (quality > 100) quality = 100;
+				if (quality < 1) quality = 1;
+
+				set((state) => {
+					state.imageOptimizations.previewQuailty = quality;
+				});
+			},
+
 			setImageOptimizations(enable) {
 				set((state) => {
 					state.imageOptimizations.enabled = enable;
+				});
+			},
+
+			setImageOptimizationsInPreview(enable) {
+				set((state) => {
+					state.imageOptimizations.enabledInPreview = enable;
 				});
 			},
 
@@ -113,7 +169,7 @@ export const useSettings = create<SettingsStateWActions>()(
 			},
 		})),
 		{
-			name: "settings-v2",
+			name: "settings-v3",
 		},
 	),
 );
