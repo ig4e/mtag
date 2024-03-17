@@ -19,7 +19,7 @@ export function BlurImage({ preview, src: image = "", ...props }: HTMLProps<HTML
 	};
 
 	return (
-		<div style={{ overflow: "hidden", width: "100%", height: "100%" }}>
+		<div style={{ overflow: "hidden", width: "100%", height: "100%" }} className={props.className}>
 			<img
 				{...props}
 				style={{
