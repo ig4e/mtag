@@ -6,7 +6,7 @@ export function BlurImage({ preview, src: image = "", ...props }: HTMLProps<HTML
 
 	useEffect(() => {
 		setCurrentImage(preview);
-		setLoading(false);
+		setLoading(true);
 	}, [preview]);
 
 	const fetchImage = (src: string) => {
