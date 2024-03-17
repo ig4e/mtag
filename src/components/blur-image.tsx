@@ -23,7 +23,7 @@ export function BlurImage({ preview, src: image = "", ...props }: HTMLProps<HTML
 			<img
 				{...props}
 				style={{
-					filter: `${loading ? "blur(40px)" : ""}`,
+					filter: `${loading ? "blur(20px)" : ""}`,
 					transition: "0.1s filter linear",
 					width: "100%",
 					height: "100%",
