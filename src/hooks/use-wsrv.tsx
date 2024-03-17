@@ -32,8 +32,8 @@ export function useWsrv() {
 			if (isPlaceholder)
 				return wsrvTemplate({
 					url: wsrvBlock ? proxyTemplate({ url, referer: url }) : url,
-					q: 50,
-					w: 10,
+					q: 80,
+					w: 20,
 					n: 1,
 					out: "jpg",
 					s: 0,
