@@ -25,7 +25,7 @@ function ImageCard({ image }: { image: Image }) {
 	const aspectRatio = dimensions ? dimensions.width / dimensions.height : image.aspectRatio;
 
 	return (
-		<div className="relative w-full overflow-hidden">
+		<div className="relative w-full rounded-md overflow-hidden">
 			<Dialog
 				onOpenChange={(open) => {
 					if (!open) {
@@ -42,7 +42,13 @@ function ImageCard({ image }: { image: Image }) {
 				}}
 			>
 				<DialogTrigger asChild>
-					<AspectRatio ratio={aspectRatio} className="bg-accent rounded-md relative">
+					<AspectRatio
+						ratio={aspectRatio}
+						className={cn("bg-accent relative overflow-hidden", {
+							blur: settings.blur === "soft",
+							"blur-3xl": settings.blur === "overcensorship",
+						})}
+					>
 						{image.isVideo ? (
 							<>
 								<Video className="absolute w-8 h-8 top-2 left-2 z-20"></Video>
@@ -62,18 +68,17 @@ function ImageCard({ image }: { image: Image }) {
 								loading="lazy"
 							/>
 						)}
-
-						<div
-							className={cn("absolute inset-0 w-full h-full rounded-md z-10", {
-								"backdrop-blur-3xl bg-gray-500/25": settings.blur === "overcensorship",
-								"backdrop-blur bg-gray-500/10": settings.blur === "soft",
-							})}
-						></div>
 					</AspectRatio>
 				</DialogTrigger>
 				<DialogContent className="p-0 bg-transparent border-none">
 					<div className="mx-4 h-full max-h-[80vh] overflow-y-scroll space-y-2 bg-secondary p-0.5 rounded-lg">
-						<AspectRatio ratio={aspectRatio} className="bg-primary/5 w-full rounded-md relative">
+						<AspectRatio
+							ratio={aspectRatio}
+							className={cn("bg-primary/5 w-full rounded-md relative", {
+								blur: settings.blur === "soft",
+								"blur-3xl": settings.blur === "overcensorship",
+							})}
+						>
 							{image.isVideo ? (
 								<video controls className="object-cover object-center rounded-md h-full w-full" autoFocus>
 									<source src={wsrv({ url, isVideo: true })} />
