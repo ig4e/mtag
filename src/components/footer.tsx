@@ -424,7 +424,7 @@ function Footer() {
 									<AlertDialogTrigger asChild>
 										<Button variant="destructive">Reset</Button>
 									</AlertDialogTrigger>
-									<AlertDialogContent className="max-w-sm">
+									<AlertDialogContent className="max-w-xs">
 										<AlertDialogHeader>
 											<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
 											<AlertDialogDescription>
