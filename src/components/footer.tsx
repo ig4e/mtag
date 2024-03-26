@@ -104,7 +104,7 @@ function Footer() {
 							</Button>
 						</DrawerTrigger>
 						<DrawerContent>
-							<DrawerHeader>
+							<DrawerHeader className="flex items-center flex-col">
 								<DrawerTitle className="flex items-center justify-center gap-2">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 59.14 31.921" className="h-4">
 										<g transform="translate(-327.29 -1352)">
@@ -118,6 +118,7 @@ function Footer() {
 									</svg>
 									<span>Settings</span>
 								</DrawerTitle>
+
 								<DrawerDescription>You can change the app settings here.</DrawerDescription>
 							</DrawerHeader>
 
