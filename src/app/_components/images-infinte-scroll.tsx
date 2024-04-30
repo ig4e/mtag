@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import ImageCard from "~/components/image-card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useSettings } from "~/store/settings";
-import { RouterOutputs, api } from "~/trpc/react";
+import { api } from "~/trpc/react";
 
 function ImagesInfinteScroll() {
   const settings = useSettings();
@@ -26,6 +26,7 @@ function ImagesInfinteScroll() {
       },
       {
         getNextPageParam: (lastPage) => lastPage.pagination.next,
+        refetchOnWindowFocus: false,
       },
     );
 
@@ -36,7 +37,7 @@ function ImagesInfinteScroll() {
   }, [isLoading, isFetching, fetchNextPage]);
 
   const [endOfPageRef, entry] = useIntersectionObserver({
-    threshold: 0.1,
+    threshold: 0.01,
     rootMargin: "0px",
   });
 

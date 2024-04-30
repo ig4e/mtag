@@ -36,6 +36,7 @@ export function BlurImage({
           width: "100%",
           height: "100%",
         }}
+		alt={props.alt}
         src={currentImage}
         onLoad={() => fetchImage(image)}
         onLoadCapture={() => fetchImage(image)}

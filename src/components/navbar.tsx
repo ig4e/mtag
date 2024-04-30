@@ -27,8 +27,8 @@ function Navbar() {
             src={"/logo.png"}
             className="h-8 w-28 rounded object-cover object-center"
             priority
-            width={128}
-            height={128}
+            width={112}
+            height={32}
             alt={"Logo"}
           />
         </a>
@@ -40,6 +40,7 @@ function Navbar() {
             className="h-6 w-6 rounded"
             width={64}
             height={64}
+            unoptimized
           />
           <span>{mediaTypesObject[settings.mediaType]?.name}</span>
         </div>
