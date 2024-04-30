@@ -13,6 +13,7 @@ function ImagesInfinteScroll() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
+    setTimeout(() => window.scrollTo({ top: 0, behavior: "instant" }), 1000);
   }, [settings.categories, settings.mediaType, settings.source, settings.sfw]);
 
   const { data, isLoading, isFetching, fetchNextPage, error, isError } =
