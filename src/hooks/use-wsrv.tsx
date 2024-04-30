@@ -1,5 +1,5 @@
-import { proxyTemplate, wsrvTemplate } from "@/config";
-import { useSettings } from "@/store/settings";
+import { proxyTemplate, wsrvTemplate } from "~/config";
+import { useSettings } from "~/store/settings";
 import React, { useCallback } from "react";
 
 export function useWsrv() {
@@ -27,7 +27,7 @@ export function useWsrv() {
 			raw?: boolean;
 			isPlaceholder?: boolean;
 		}) => {
-			if (isVideo || raw || !imageSettings.enabled) return proxyTemplate({ url, referer: url });
+			if (isVideo ?? raw ?? !imageSettings.enabled) return proxyTemplate({ url, referer: url });
 
 			if (isPlaceholder)
 				return wsrvTemplate({
