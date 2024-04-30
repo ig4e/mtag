@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { type HTMLProps, useEffect, useState } from "react";
 
 export function BlurImage({
