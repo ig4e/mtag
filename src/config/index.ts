@@ -103,21 +103,21 @@ export const sources = [
     },
     supportMediaType: false,
   },
-  {
-    value: "pornhub",
-    iconURL: "/pornhub.png",
-    name: "Pornhub",
-    mediaType: "real",
-    categories: {
-      support: true,
-      values: undefined,
-    },
-    subs: {
-      support: false,
-      values: undefined,
-    },
-    supportMediaType: false,
-  },
+  // {
+  //   value: "pornhub",
+  //   iconURL: "/pornhub.png",
+  //   name: "Pornhub",
+  //   mediaType: "real",
+  //   categories: {
+  //     support: true,
+  //     values: undefined,
+  //   },
+  //   subs: {
+  //     support: false,
+  //     values: undefined,
+  //   },
+  //   supportMediaType: false,
+  // },
   {
     value: "realbooru",
     iconURL: "/rb.ico",
