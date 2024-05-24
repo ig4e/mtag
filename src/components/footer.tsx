@@ -73,7 +73,7 @@ function Footer() {
 		<>
 			<footer
 				className={cn(
-					"z-40 py-3 bg-background/50 drop-shadow-md backdrop-blur-xl fixed bottom-0 inset-x-0 border-t border-border will-change-auto transition-all",
+					"z-40 py-3 bg-background/50 drop-shadow-md fixed bottom-0 inset-x-0 border-t border-border will-change-auto transition-all",
 					{
 						"translate-y-16": !show && ["footer", "all"].includes(settings.hideOnScroll),
 					},
