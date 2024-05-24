@@ -11,7 +11,7 @@ function Navbar() {
 	return (
 		<nav
 			className={cn(
-				"z-40 py-2 bg-background/50 drop-shadow-md backdrop-blur-xl sticky top-0 border-b border-border will-change-auto transition-all",
+				"z-40 py-2 bg-background/50 drop-shadow-md sticky top-0 border-b border-border will-change-auto transition-all",
 				{
 					"-translate-y-16": !show && ["navbar", "all"].includes(settings.hideOnScroll),
 				},
