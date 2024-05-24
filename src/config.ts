@@ -1,5 +1,5 @@
 const dev = process.env.NODE_ENV === "development";
-const cluster = true ? "cyclic" : "render";
+const cluster = false ? "cyclic" : "render";
 
 export const API_URL = dev ? "http://localhost:3006" : cluster === "render" ? "https://mtag-api.onrender.com" : "https://good-jade-chimpanzee-tutu.cyclic.app";
 export const IMAGE_PROXY = "https://rule69-proxy.moe-dev.workers.dev";
